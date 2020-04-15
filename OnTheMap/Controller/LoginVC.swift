@@ -55,6 +55,7 @@ class LoginVC: UIViewController {
         passwordTextField.isEnabled = !state
         loginButton.isHidden = state
         loginActivityIndicator.isHidden = !state
+//        loginActivityIndicator.stopAnimating()
     }
     
     func handlerLoginResponse(result: Bool?, error: Error?) -> Void {

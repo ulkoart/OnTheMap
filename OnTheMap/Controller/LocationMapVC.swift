@@ -24,6 +24,7 @@ class LocationMapVC: UIViewController {
         
     }
     
+    
     @IBAction func refreshButtonPressed(_ sender: UIBarButtonItem) {
         mapView.removeAnnotations(annotations)
         annotations.removeAll()
@@ -69,17 +70,27 @@ class LocationMapVC: UIViewController {
     
     func handlerLoadLocationDataResponse(data: [Location], error: Error?) -> Void {
         
+        activityIndicator.isHidden = true
+        refreshButton.isEnabled = true
+        
+        if (error != nil) {
+            showLoginFailure(message: error?.localizedDescription ?? "")
+            return
+        }
+        
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
         appDelegate.locations.removeAll()
         appDelegate.locations.append(contentsOf: data)
-        
         addAnnotationsOnMap(appDelegate.locations)
-        
-        activityIndicator.isHidden = true
-        refreshButton.isEnabled = true
         self.mapView.addAnnotations(annotations)
         
+    }
+    
+    func showLoginFailure(message: String) {
+        let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        show(alertVC, sender: nil)
     }
     
     func loadLocationData() {
